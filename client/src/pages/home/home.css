@@ -1,0 +1,13 @@
+.home-page {
+  height: 100vh;
+  background-image: url("./../../../public/images/home-image.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile {
+  color: white;
+}

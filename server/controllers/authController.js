@@ -5,10 +5,9 @@ const jwt = require("jsonwebtoken");
 
 router.post("/signup", async (req, res) => {
   try {
-    //1. If the user already exists
+    // 1. If the user already exists
     const user = await User.findOne({ email: req.body.email });
 
-    //2. If user exists, send an error response
     if (user) {
       return res.status(400).send({
         message: "User Already exists!",
@@ -16,20 +15,20 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    //3. encrypt the password
+    // 2. Encrypt the password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     req.body.password = hashedPassword;
 
-    //4. Create new user, save in db
+    // 3. Create new user and save in DB
     const newUser = new User(req.body);
     await newUser.save();
 
-    res.status(201).send({
+    return res.status(201).send({
       message: "User Created Successfully!",
       success: true,
     });
   } catch (error) {
-    res.send({
+    return res.status(500).send({
       message: error.message,
       success: false,
     });
@@ -38,39 +37,39 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    //1. check if user exists
+    // 1. Check if the user exists
     const user = await User.findOne({ email: req.body.email }).select(
       "+password"
     );
 
     if (!user) {
-      res.status(400).send({
+      return res.send({
         message: "User doesn't exist",
         success: false,
       });
     }
 
-    //2. check is the password is correct
+    // 2. Check if the password is correct
     const isValid = await bcrypt.compare(req.body.password, user.password);
     if (!isValid) {
-      res.status(400).send({
-        message: "wrong email/password",
+      return res.send({
+        message: "Wrong email/password",
         success: false,
       });
     }
 
-    //3. if the user exists and password is correct, assign a jwt
+    // 3. If the user exists and password is correct, assign a JWT
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
 
-    res.status(201).send({
+    return res.status(200).send({
       message: "User logged in successfully",
       success: true,
       token: token,
     });
   } catch (error) {
-    res.status(400).send({
+    return res.send({
       message: error.message,
       success: false,
     });
