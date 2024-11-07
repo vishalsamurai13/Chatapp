@@ -1,3 +1,7 @@
+body{
+    overflow-y: hidden;
+}
+
 .loader-overlay{
     position: fixed;
     width: 100%;

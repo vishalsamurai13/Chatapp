@@ -1,3 +1,7 @@
+body {
+  overflow-y: hidden;
+}
+
 .home-page {
   height: 100vh;
   background: rgb(12, 11, 64);
@@ -100,8 +104,279 @@
 .sidebar-container {
   width: 25%;
   padding-left: 10px;
+  padding-right: 10px;
+  border-right: 2px solid rgb(0, 38, 113);
 }
 
 .main-container {
   width: 75%;
+}
+
+/* Search Bar Container */
+.search-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0; /* Add some space above and below */
+}
+
+/* Search Input */
+.search-input {
+  flex: 1;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  background-color: transparent;
+  border: white 1px solid;
+  transition: background-color 0.3s ease-in-out;
+  margin-right: 5px;
+}
+
+/* Change input background on focus */
+.search-input:focus {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* Search Button */
+.search-button {
+  padding: 15px;
+  background-color: #4a90e2;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  transition: background-color 0.3s ease-in-out;
+  width: 60px;
+  border-radius: 10px;
+}
+
+/* Hover Effect for Button */
+.search-button:hover {
+  background-color: #357ab8;
+}
+
+/*******************************************************
+********CSS FOR USER LIST COMPONENT*********************
+********************************************************/
+.user-search-filter {
+  margin-bottom: 10px;
+}
+
+.filtered-user {
+  border-bottom: #ccc 1px solid;
+  padding: 10px 10px;
+  color: #28282b;
+  cursor: pointer;
+  background-color: #000080;
+  border-radius: 10px;
+  color: white;
+}
+
+.selected-user {
+  border-bottom: #020060 1px solid;
+  padding: 10px 10px;
+  color: #28282b;
+  cursor: pointer;
+  background-color: #ffffff;
+  border-radius: 10px;
+  color: rgb(0, 0, 0);
+}
+
+.filtered-user:hover {
+  background-color: white;
+  color: black;
+  .user-default-profile-pic,
+  .user-profile-image {
+    background-color: #2767a3;
+    color: white;
+  }
+  .user-start-chat-btn {
+    background-color: #2767a3;
+    color: white;
+  }
+}
+
+.filter-user-display {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filter-user-details {
+  width: 60%;
+}
+.user-display-name {
+  padding: 1px 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.user-display-email {
+  padding: 1px 20px;
+  font-size: 12px;
+}
+
+.user-default-profile-pic,
+.user-profile-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #7283ef;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+}
+.user-start-chat {
+  padding: 10px 0px;
+}
+.user-start-chat-btn {
+  padding: 10px 5px;
+  border: none;
+  border-radius: 3px;
+  background-color: #7283ef;
+  color: white;
+}
+
+/*******************************************************
+********CSS CHATBOX COMPONENT*********************
+********************************************************/
+
+.chat-container {
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+}
+
+.chat-header {
+  text-align: right;
+  font-size: 25px;
+  font-weight: 600;
+  border-bottom: 2px solid rgb(0, 38, 113);
+  padding: 15px;
+  margin-bottom: 10px;
+}
+/* ////////////////////////////////////////////////////////// */
+/* //////////////////// SCROLL BAR ////////////////////////// */
+/* ////////////////////////////////////////////////////////// */
+
+.message-box {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 10px 20px;
+}
+
+.message-box::-webkit-scrollbar {
+  width: 5px;
+}
+
+.message-box::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px grey;
+  border-radius: 10px;
+}
+
+.message-box::-webkit-scrollbar-thumb {
+  background: rgb(51, 45, 173);
+  border-radius: 10px;
+}
+
+.message-box::-webkit-scrollbar-thumb:hover {
+  background: rgb(0, 13, 255);
+}
+
+/* ////////////////////////////////////////////////////////// */
+/* ////////////////////////////////////////////////////////// */
+
+/* Container for input and button */
+.send-message {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center; /* Align input and button vertically */
+  padding-right: 45px; /* Adds right padding to keep button on top of the input */
+  margin-top: 10px;
+}
+
+/* Chat input */
+.send-message-input {
+  width: 97%;
+  height: 49px;
+  padding: 10px 20px;
+  background-color: #100e74;
+  border-radius: 5px;
+  color: white;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  font-size: medium;
+}
+
+/* Send button */
+.send-message-btn {
+  position: absolute;
+  left: 94%; /* Adjust distance from right */
+  font-size: 36px;
+  color: #100e74;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 5px;
+  width: auto;
+  border: 1px solid white;
+}
+
+.send-message-btn:hover,
+.send-message-btn:focus {
+  background-color: #100e74;
+  color: white;
+  outline: none;
+  cursor: pointer;
+}
+
+.message-container {
+  display: flex;
+}
+
+.sent-msg,
+.recieved-msg {
+  padding: 10px 20px;
+  margin-top: 5px;
+  border-radius: 10px;
+  font-size: 14px;
+  width: fit-content;
+}
+
+.sent-msg {
+  background-color: rgb(33, 25, 142);
+  color: white;
+  margin-left: 100px;
+  border-top-right-radius: 0px;
+}
+
+.recieved-msg {
+  background-color: white;
+  color: black;
+  margin-right: 100px;
+  border-bottom-left-radius: 0px;
+}
+
+.msg-timestamp {
+  width: fit-content;
+  font-size: 13px;
+  color: rgb(140, 140, 140);
+}
+
+@media only screen and (max-width: 1000px) {
+  .filter-user-details {
+    display: none;
+  }
+  .chat-container {
+    width: 85%;
+  }
+  .sidebar-container {
+    width: 15%;
+  }
+  .search-container {
+    display: none;
+  }
 }
