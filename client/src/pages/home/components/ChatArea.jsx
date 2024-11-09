@@ -4,10 +4,11 @@ import { hideLoader, showLoader } from "../../../redux/loaderSlice";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { clearUnreadMessageCount } from "./../../../apiCalls/chat";
 
 const ChatArea = () => {
   const dispatch = useDispatch();
-  const { selectedChat, user } = useSelector((state) => state.userReducer);
+  const { selectedChat, user, allChats } = useSelector((state) => state.userReducer);
   const selectedUser = selectedChat.members.find((u) => u._id !== user._id);
   const [message, setMessage] = useState("");
   const [allMessages, setAllMessages] = useState([]);
@@ -71,8 +72,39 @@ const ChatArea = () => {
     setSelectedMessageId(selectedMessageId === messageId ? null : messageId);
   };
 
+  function formatName(user){
+    let fname = user.firstname.at(0).toUpperCase() + user.firstname.slice(1).toLowerCase();
+    let lname = user.lastname.at(0).toUpperCase() + user.lastname.slice(1).toLowerCase();
+    return fname + " " + lname;
+  }
+
+  const clearUnreadMessages = async () => {
+    try {
+      dispatch(showLoader());
+      const response = await clearUnreadMessageCount(selectedChat._id);
+      dispatch(hideLoader());
+
+      if (response.success) {
+        allChats.map(chat => {
+          if(chat._id === selectedChat._id){
+            return response.data;
+          }
+          return chat;
+        })
+      } else {
+        setAllMessages([]); // Fallback to empty array if fetching fails
+      }
+    } catch (error) {
+      dispatch(hideLoader());
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getMessages();
+    if(selectedChat?.lastMessage?.sender !== user._id){
+      clearUnreadMessages();
+    }  
   }, [selectedChat]);
 
   return (
@@ -80,7 +112,7 @@ const ChatArea = () => {
       {selectedChat && (
         <div className="chat-container">
           <div className="chat-header">
-            {selectedUser.firstname + " " + selectedUser.lastname};
+            {formatName(selectedUser)};
           </div>
 
           <div className="message-box">
@@ -103,7 +135,7 @@ const ChatArea = () => {
                       className="msg-timestamp" 
                       style={isCurrentUserSender ? {float: 'right'} : {float: "left"}}
                       >
-                        {formatTime(msg.createdAt)}
+                        {formatTime(msg.createdAt)} {isCurrentUserSender && msg.read && <i className="fa fa-check-circle" aria-hidden="true" style={{color: "blue"}}></i>}
                       </div>
                     )}
                   </div>

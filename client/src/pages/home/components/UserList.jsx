@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { createNewChat } from "../../../apiCalls/chat";
 import { hideLoader, showLoader } from "../../../redux/loaderSlice";
 import { setAllChats, setSelectedChat } from "../../../redux/usersSlice";
+import moment from "moment";
 
 const UserList = ({ searchKey }) => {
   const {
@@ -53,18 +54,68 @@ const UserList = ({ searchKey }) => {
     return false;
   };
 
-  return allUsers
-    .filter((user) => {
-      const a = user.firstname.toLowerCase().includes(searchKey.toLowerCase());
-      const b = user.lastname.toLowerCase().includes(searchKey.toLowerCase());
-      return (
-        ((a || b) && searchKey) ||
-        allChats.some((chat) =>
-          chat.members.map((m) => m._id).includes(user._id)
-        )
-      );
-    })
-    .map((user) => {
+  const getLastMessageTimeStamp = (userId) => {
+    const chat = allChats.find(chat => chat.members.map(m => m._id).includes(userId));
+
+    if(!chat || !chat?.lastMessage){
+        return "";
+    }else{
+        return moment(chat?.lastMessage?.createdAt).format('hh:mm A');
+    }
+  }
+
+  const getLastMessage = (userId) => {
+    const chat = allChats.find((chat) =>
+      chat.members.map((m) => m._id).includes(userId)
+    );
+
+    if (!chat || !chat.lastMessage) {
+      return "";
+    } else {
+      const msgPrefix =
+        chat?.lastMessage?.sender === currentUser._id ? "You: " : "";
+      return msgPrefix + chat.lastMessage?.text?.substring(0, 25);
+    }
+  };
+
+  function formatName(user) {
+    let fname =
+      user.firstname.at(0).toUpperCase() +
+      user.firstname.slice(1).toLowerCase();
+    let lname =
+      user.lastname.at(0).toUpperCase() + user.lastname.slice(1).toLowerCase();
+    return fname + " " + lname;
+  }
+
+  const getUnreadMessageCount = (userId) => {
+    const chat = allChats.find((chat) =>
+      chat.members.map((m) => m._id).includes(userId)
+    );
+    if (chat && chat.unreadMessageCount && chat.lastMessage.sender !== currentUser._id) {
+      return <div className="unread-counter"> {chat.unreadMessageCount} </div>;
+    } else {
+      return "";
+    }
+  };
+
+  function getData(){
+    if(searchKey === ""){
+      return allChats;
+    }else{
+      allUsers.filter(user => {
+        return user.firstname.toLowerCase().includes(searchKey.toLowerCase()) ||
+        user.lastname.toLowerCase().includes(searchKey.toLowerCase());
+      })
+    }
+  }
+
+  return (
+    getData()
+    .map((obj) => {
+      let user = obj;
+      if(obj.members){
+        user = obj.members.find(mem => mem._id !== currentUser._id)
+      }
       return (
         <div
           className="user-search-filter"
@@ -81,10 +132,16 @@ const UserList = ({ searchKey }) => {
                   user.lastname.charAt(0).toUpperCase()}
               </div>
               <div className="filter-user-details">
-                <div className="user-display-name">
-                  {user.firstname + " " + user.lastname}
+                <div className="user-display-name">{formatName(user)}</div>
+                <div className="user-display-email">
+                  {getLastMessage(user._id) || user.email}
                 </div>
-                <div className="user-display-email">{user.email}</div>
+              </div>
+              <div className="count-timestamp">
+                {getUnreadMessageCount(user._id)}
+                <div className="last-msg-timestamp">
+                  {getLastMessageTimeStamp(user._id)}
+                </div>
               </div>
               {!allChats.find((chat) =>
                 chat.members.map((m) => m._id).includes(user._id)
@@ -102,7 +159,8 @@ const UserList = ({ searchKey }) => {
           </div>
         </div>
       );
-    });
+    })
+  );
 };
 
 export default UserList;
