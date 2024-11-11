@@ -406,3 +406,9 @@ body {
   position: relative;
   left: 40px;
 }
+
+.check-mark{
+  color: rgb(140, 140, 140);
+  background-color: rgb(0, 0, 0);
+  border-radius: 50%;
+}
