@@ -4,10 +4,11 @@ import Search from "./search";
 import UserList from "./UserList";
 import ChatArea from "./ChatArea";
 import { useSelector } from "react-redux";
-import { io } from "socket.io-client";
+
+import socket from "../../../socket";
 
 const HomeBox = () => {
-  const socket = io("http://localhost:5001"); 
+  
 
   const [searchKey, setSearchKey] = useState("");
   const { selectedChat, user } = useSelector(state => state.userReducer);
@@ -26,7 +27,7 @@ const HomeBox = () => {
         <UserList searchKey={searchKey} />
       </div>
       <div className="main-container">
-        {selectedChat && <ChatArea socket={socket} />}
+        {selectedChat && <ChatArea />}
       </div>
     </div>
   );

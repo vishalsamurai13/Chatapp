@@ -5,9 +5,10 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { clearUnreadMessageCount } from "./../../../apiCalls/chat";
-import store from './../../../redux/store';
+import store from "./../../../redux/store";
+import socket from "../../../socket";
 
-const ChatArea = ({ socket }) => {
+const ChatArea = () => {
   const dispatch = useDispatch();
   const { selectedChat, user, allChats } = useSelector(
     (state) => state.userReducer
@@ -29,7 +30,7 @@ const ChatArea = ({ socket }) => {
         ...newMessage,
         members: selectedChat.members.map((m) => m._id),
         read: false,
-        createdAt: moment().format("DD-MM-YYYY HH:mm:ss"),
+        createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       });
 
       const response = await createNewMessage(newMessage);
@@ -116,12 +117,17 @@ const ChatArea = ({ socket }) => {
     }
 
     socket.off("recieve-message").on("recieve-message", (data) => {
-      
+      const selectedChat = store.getState().userReducer.selectedChat;
+      if(selectedChat._id === data.chatId){
         setAllMessages((prevmsg) => [...prevmsg, data]);
-      
-      
+      }
     });
   }, [selectedChat]);
+
+  useEffect(() => {
+    const msgContainer = document.getElementById("message-box");
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+  }, [allMessages]);
 
   return (
     <>
@@ -129,7 +135,7 @@ const ChatArea = ({ socket }) => {
         <div className="chat-container">
           <div className="chat-header">{formatName(selectedUser)};</div>
 
-          <div className="message-box">
+          <div className="message-box" id="message-box">
             {allMessages.map((msg) => {
               const isCurrentUserSender = msg.sender === user._id;
 
