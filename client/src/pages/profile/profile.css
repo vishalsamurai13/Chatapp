@@ -1,0 +1,189 @@
+/* Full-page container */
+.profile-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    background-color: #f5f5f5; /* Light background */
+    padding: 20px;
+  }
+  
+  /* Card styling */
+  .profile-card {
+    background-color: #ffffff; /* White background for the card */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 30px; /* Inner spacing */
+    width: 90%; /* Responsive width */
+    max-width: 400px; /* Maximum width */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center align items inside the card */
+    gap: 20px; /* Spacing between elements */
+    text-align: center; /* Center text alignment */
+  }
+
+  .profile-info-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Profile picture styling */
+  .profile-pic-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Add spacing below the picture */
+  }
+  
+  .profilePage-pic,
+  .user-profile-pic-upload {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Circular picture */
+    object-fit: cover; /* Maintain aspect ratio */
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2); /* Slight shadow */
+  }
+  
+  /* Name with underline */
+  .user-profile-name h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333; /* Darker text */
+    text-align: center;
+    margin: 0 auto 10px; /* Center and add spacing below */
+    border-bottom: 2px solid #ccc; /* Add underline */
+    padding-bottom: 5px;
+    width: 100%; /* Limit the width of the underline */
+    margin-bottom: 20px;
+  }
+  
+  /* Email and account created styling */
+  .user-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align text and box */
+    width: fit-content; /* Adjust box width to content */
+    margin-bottom: 20px; /* Spacing between items */
+  }
+  
+  .user-info-item b {
+    margin-bottom: 5px; /* Spacing between label and value */
+    font-size: 1em;
+    color: #666; /* Subtle label color */
+  }
+  
+  .info-box {
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); /* Box shadow for the value box */
+    font-size: 1em;
+    color: #333; /* Slightly darker text */
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+  
+  /* File input centered */
+  .select-profile-pic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align label and input */
+    gap: 10px; /* Spacing between label and input */
+  }
+  
+  .file-label {
+    display: block;
+    font-size: 0.9em;
+    color: #666; /* Subtle label text */
+  }
+  
+  .file-input{
+    position: relative;
+    right: -20px;
+    font-size: 13px;
+  }
+
+  input[type="file"]::file-selector-button {
+    border-radius: 4px;
+    padding: 0 16px;
+    height: 30px;
+    cursor: pointer;
+    background-color: #28282B;
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+    margin-right: 16px;
+    transition: background-color 200ms;
+  }
+  
+  /* file upload button hover state */
+  input[type="file"]::file-selector-button:hover {
+    background-color: #f3f4f6;
+    color: #28282B;
+  }
+  
+  /* file upload button active state */
+  input[type="file"]::file-selector-button:active {
+    background-color: #e5e7eb;
+    color: #28282B;
+  }
+
+/* CSS */
+.upload-profile-pic-btn {
+  background-color: #ffffff;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 0px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 50%;
+  margin-top: 20px;
+}
+
+.upload-profile-pic-btn:hover {
+  background-color: #000000;
+  color: white;
+  box-shadow: #a7a7a7 4px 4px 0 0;
+  border: 2px solid #a7a7a7;
+}
+
+.upload-profile-pic-btn:active {
+  box-shadow: #626262 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+@media (min-width: 768px) {
+  .upload-profile-pic-btn {
+    min-width: 120px;
+    padding: 0;
+  }
+}
+
+.back-button{
+  width: auto;
+  margin-bottom: 10px;
+  font-size: 13px;
+  position: relative;
+  right: 179px;
+  box-shadow: #a7a7a7 2px 2px 0 0;
+  color: rgb(255, 255, 255);
+  background-color: rgb(71, 71, 71);
+}
+
+.back-button:hover{
+  background-color: rgb(46, 46, 46);
+}

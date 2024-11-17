@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import ProtectedRoute from "./components/protectedRoute";
 import Loader from "./components/loader";
 import { useSelector } from "react-redux";
+import Profile from "./pages/profile";
 
 function App() {
   const { loader } = useSelector((state) => state.loaderReducer);
@@ -16,10 +17,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route
-            path="/"
+            path="/home"
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           ></Route>

@@ -28,7 +28,7 @@ function LoginForm() {
           },
         });
         localStorage.setItem("token", response.token);
-        window.location.href = "/";
+        window.location.href = "/home";
       } else {
         toast.error(response.message, {
           style: {

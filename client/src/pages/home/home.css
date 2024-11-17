@@ -49,6 +49,8 @@ body {
 .header-right {
   display: flex;
   align-items: center;
+  position: relative; /* Ensure proper positioning for dropdown */
+  overflow: visible;
 }
 
 .user-name {
@@ -64,6 +66,10 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid white;
+}
+
+.profile-pic:hover{
+  cursor: pointer;
 }
 
 .home-container {
@@ -187,6 +193,7 @@ body {
   background-color: white;
   color: black;
   .user-default-profile-pic,
+  .user-selected-avatar,
   .user-profile-image {
     background-color: #2767a3;
     color: white;
@@ -325,6 +332,32 @@ body {
   border: 1px solid white;
 }
 
+.send-emoji-btn {
+  position: absolute;
+  left: 89%; /* Adjust distance from right */
+  font-size: 30px;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0px;
+  width: auto;
+}
+.send-emoji-btn:hover{
+  background: transparent;
+}
+
+.send-image-btn {
+  position: absolute;
+  left: 86%; /* Adjust distance from right */
+  font-size: 28px;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0px;
+  width: auto;
+  top: 11px;
+}
+
 .send-message-btn:hover,
 .send-message-btn:focus {
   background-color: #100e74;
@@ -367,7 +400,7 @@ body {
 }
 
 @media only screen and (max-width: 1000px) {
-  .filter-user-details {
+  .filter-user-details, .last-msg-timestamp, .unread-counter  {
     display: none;
   }
   .chat-container {
@@ -411,4 +444,135 @@ body {
   color: rgb(140, 140, 140);
   background-color: rgb(0, 0, 0);
   border-radius: 50%;
+}
+
+.typingIndicatorContainer {
+  display: flex;
+  flex: 1;
+  align-items: start;
+  justify-content: start;
+  padding: 0; /* No padding to ensure it sticks to the left */
+  margin: 0; /* No margin to remove any gap */
+}
+
+.typingIndicatorBubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 40px;
+  margin: 0; /* Keeps consistent spacing between bubbles */
+  background-color: #f0f1f1;
+  border-radius: 10px;
+  border-bottom-left-radius: 0px;
+}
+
+.typingIndicatorBubbleDot {
+  width: 4px;
+  height: 4px;
+  margin-right: 4px;
+  background-color: #57585a;
+  border-radius: 50%;
+  animation-name: bounce;
+  animation-duration: 1.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.typingIndicatorBubbleDot:first-of-type {
+  margin: 0px 4px;
+}
+
+.typingIndicatorBubbleDot:nth-of-type(2) {
+  animation-delay: 0.15s;
+}
+
+.typingIndicatorBubbleDot:nth-of-type(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-4px);
+  }
+}
+
+.dot3-btn, .dot3-btn:hover {
+  width: auto;
+  background: transparent;
+  font-size: 30px;
+  position: relative;
+  right: -21px;
+  cursor: pointer;
+}
+
+/* Dropdown container */
+.dropdown-container {
+  position: relative;
+  overflow: visible;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  background: none;
+  position: absolute;
+  top: 100%; /* Position below the button */
+  right: -29px; /* Align to the right */
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Dropdown items */
+#dd-item1, #dd-item2 {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 14px;
+  color: #000000;
+  text-align: left;
+  font-weight: 400;
+  margin-top: 10px;
+  opacity: 0; /* Initially hidden */
+  transform: translateY(-10px); /* Slide effect */
+  animation: dropDown 0.3s ease forwards; /* Apply animation */
+}
+
+/* Hover effects */
+#dd-item1:hover {
+  background-color: #2d29ff;
+  color: white;
+}
+
+#dd-item2:hover {
+  background-color: #c91d1d;
+  color: white;
+}
+
+/* Individual animations for dropdown items */
+#dd-item1 {
+  animation-delay: 0.2s; /* Delay for first item */
+}
+
+#dd-item2 {
+  animation-delay: 0.3s; /* Delay for second item */
+}
+
+/* Keyframes for dropdown animation */
+@keyframes dropDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px); /* Start slightly above */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* End in place */
+  }
 }

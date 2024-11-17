@@ -4,14 +4,17 @@ import { createNewChat } from "../../../apiCalls/chat";
 import { hideLoader, showLoader } from "../../../redux/loaderSlice";
 import { setAllChats, setSelectedChat } from "../../../redux/usersSlice";
 import moment from "moment";
+import socket from "../../../socket";
+import { useEffect } from "react";
+import store from "../../../redux/store";
 
-const UserList = ({ searchKey }) => {
+const UserList = ({ searchKey, onlineUser }) => {
   const {
     allUsers,
     allChats,
     user: currentUser,
     selectedChat,
-  } = useSelector((state) => state.userReducer);
+  } = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   const startNewChat = async (searchedUserId) => {
@@ -98,23 +101,57 @@ const UserList = ({ searchKey }) => {
     }
   };
 
-  function getData(){
-    if(searchKey === ""){
-      return allChats;
-    }else{
-      allUsers.filter(user => {
-        return user.firstname.toLowerCase().includes(searchKey.toLowerCase()) ||
-        user.lastname.toLowerCase().includes(searchKey.toLowerCase());
-      })
+  function getData() {
+    if (searchKey === "") {
+      return allChats || []; // Fallback to an empty array if allChats is undefined
+    } else {
+      return (allUsers || []).filter((user) => {
+        return (
+          user.firstname.toLowerCase().includes(searchKey.toLowerCase()) ||
+          user.lastname.toLowerCase().includes(searchKey.toLowerCase())
+        );
+      });
     }
   }
+  
+
+  useEffect(() => {
+    socket.on('recieve-message', (message) => {
+      const selectedChat = store.getState().userReducer.selectedChat;
+      let allChats = store.getState().userReducer.allChats;
+
+      if(selectedChat?._id !== message.chatId){
+         const updatedChats = allChats.map(chat => {
+          if(chat._id === message.chatId ){
+            return {
+              ...chat,
+              unreadMessageCount: (chat?.unreadMessageCount || 0) + 1,
+              lastMessage: message
+            }
+          }
+          return chat;
+         }); 
+         allChats = updatedChats;
+      }
+      //1. find the latest chat
+      const latestChat = allChats.find(chat => chat._id === message.chatId);
+
+      //2. get all chat except latest chat
+      const otherChats = allChats.filter(chat => chat._id !== message.chatId);
+
+      //3. create new array latest chat on top % then other chat
+      allChats = [latestChat, ...otherChats];
+
+      dispatch(setAllChats(allChats));
+    })
+  }, [])
 
   return (
     getData()
-    .map((obj) => {
+    .map(obj => {
       let user = obj;
       if(obj.members){
-        user = obj.members.find(mem => mem._id !== currentUser._id)
+          user = obj.members.find(mem => mem._id !== currentUser._id);
       }
       return (
         <div
@@ -126,11 +163,23 @@ const UserList = ({ searchKey }) => {
             className={IsSelectedChat(user) ? "selected-user" : "filtered-user"}
           >
             <div className="filter-user-display">
-              {/* <img src={user.profilePic} alt="Profile Pic" className="user-profile-image"> */}
-              <div className="user-default-profile-pic">
-                {user.firstname.charAt(0).toUpperCase() +
-                  user.lastname.charAt(0).toUpperCase()}
-              </div>
+              {user.profilePic && <img 
+                                    src={user.profilePic} 
+                                    alt="Profile Pic" 
+                                    className="user-profile-image" 
+                                    style={onlineUser.includes(user._id) ? {border: '#5efc03 3px solid'} : {} } 
+                                  />
+              }
+              {!user.profilePic && <div 
+                                    className= "user-default-profile-pic"
+                                    style={onlineUser.includes(user._id) ? {border: '#5efc03 3px solid'} : {} } 
+                                  >
+              
+                {
+                  user.firstname.charAt(0).toUpperCase() +
+                  user.lastname.charAt(0).toUpperCase()
+                }
+              </div>}
               <div className="filter-user-details">
                 <div className="user-display-name">{formatName(user)}</div>
                 <div className="user-display-email">
@@ -143,9 +192,7 @@ const UserList = ({ searchKey }) => {
                   {getLastMessageTimeStamp(user._id)}
                 </div>
               </div>
-              {!allChats.find((chat) =>
-                chat.members.map((m) => m._id).includes(user._id)
-              ) && (
+              { !allChats.find(chat => chat.members.map(m => m._id).includes(user._id)) && (
                 <div className="user-start-chat">
                   <button
                     onClick={() => startNewChat(user._id)}
