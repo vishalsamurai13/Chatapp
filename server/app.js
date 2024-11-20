@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require('path');
 
 const authRouter = require("./controllers/authController");
 const userRouter = require("./controllers/userController");
@@ -19,10 +20,17 @@ const io = require("socket.io")(server, {
   },
 });
 
+const _dirname = path.resolve();
+
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/message", messageRouter);
+
+app.use(express.static(path.join(_dirname, "/client/dist")))
+app.get('*' , (_,res) => {
+  res.sendFile(path.resolve(_dirname, "client" , "dist", "index.html"));
+});
 
 const onlineUser = [];
 
